@@ -4,45 +4,43 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"time"
 )
 
 type PackageData struct {
-	Help    string `json:"help"`
-	Success bool   `json:"success"`
+	Success bool `json:"success"`
 	Result  []struct {
-		Id                string    `json:"id"`
-		Name              string    `json:"name"`
-		Title             string    `json:"title"`
-		Author            string    `json:"author"`
-		AuthorEmail       string    `json:"author_email"`
-		Maintainer        string    `json:"maintainer"`
-		MaintainerEmail   string    `json:"maintainer_email"`
-		LicenseTitle      string    `json:"license_title"`
-		LicenseId         string    `json:"license_id"`
-		Notes             string    `json:"notes"`
-		Url               string    `json:"url"`
-		State             string    `json:"state"`
-		Private           bool      `json:"private"`
-		RevisionTimestamp time.Time `json:"revision_timestamp"`
-		MetadataCreated   time.Time `json:"metadata_created"`
-		MetadataModified  time.Time `json:"metadata_modified"`
-		CreatorUserId     string    `json:"creator_user_id"`
-		Type              string    `json:"type"`
+		Id                string `json:"id"`
+		Name              string `json:"name"`
+		Title             string `json:"title"`
+		Author            string `json:"author"`
+		AuthorEmail       string `json:"author_email"`
+		Maintainer        string `json:"maintainer"`
+		MaintainerEmail   string `json:"maintainer_email"`
+		LicenseTitle      string `json:"license_title"`
+		LicenseId         string `json:"license_id"`
+		Notes             string `json:"notes"`
+		Url               string `json:"url"`
+		State             string `json:"state"`
+		Private           bool   `json:"private"`
+		RevisionTimestamp string `json:"revision_timestamp"`
+		MetadataCreated   string `json:"metadata_created"`
+		MetadataModified  string `json:"metadata_modified"`
+		CreatorUserId     string `json:"creator_user_id"`
+		Type              string `json:"type"`
 		Resources         []struct {
-			Id                string    `json:"id"`
-			RevisionId        string    `json:"revision_id"`
-			Url               string    `json:"url"`
-			Description       string    `json:"description"`
-			Format            string    `json:"format"`
-			State             string    `json:"state"`
-			RevisionTimestamp time.Time `json:"revision_timestamp"`
-			Name              string    `json:"name"`
-			Mimetype          string    `json:"mimetype"`
-			Size              string    `json:"size"`
-			Created           time.Time `json:"created"`
-			ResourceGroupId   string    `json:"resource_group_id"`
-			LastModified      string    `json:"last_modified"`
+			Id                string `json:"id"`
+			RevisionId        string `json:"revision_id"`
+			Url               string `json:"url"`
+			Description       string `json:"description"`
+			Format            string `json:"format"`
+			State             string `json:"state"`
+			RevisionTimestamp string `json:"revision_timestamp"`
+			Name              string `json:"name"`
+			Mimetype          string `json:"mimetype"`
+			Size              string `json:"size"`
+			Created           string `json:"created"`
+			ResourceGroupId   string `json:"resource_group_id"`
+			LastModified      string `json:"last_modified"`
 		} `json:"resources"`
 		Tags []struct {
 			Id           string `json:"id"`
@@ -93,7 +91,31 @@ func main() {
 			log.Fatalln(err.Error())
 		}
 
-		log.Println(packageData)
+		if !packageData.Success {
+			log.Fatalln("unable to fetch package info for", name)
+		}
+
+		for _, pkg := range packageData.Result {
+			log.Println(pkg.Id)
+			log.Println(pkg.Name)
+			log.Println(pkg.Title)
+			log.Println(pkg.Author)
+			log.Println(pkg.Maintainer)
+			log.Println(pkg.LicenseId)
+			log.Println(pkg.LicenseTitle)
+			log.Println(pkg.RevisionTimestamp)
+			log.Println(pkg.Type)
+			for _, r := range pkg.Resources {
+				log.Println(r.Id)
+				log.Println(r.Name)
+				log.Println(r.Url)
+				log.Println(r.Format)
+				log.Println(r.Mimetype)
+				log.Println(r.Size)
+				log.Println(r.LastModified)
+			}
+			log.Println("----------")
+		}
 
 	}
 
